@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Libros y Usuarios</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #002D62; color: white; }
+    </style>
+</head>
+<body>
+
+    <h2>Listado de Libros</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Título del Libro</th>
+                <th>Autor</th>
+                <th>Género</th>
+                <th>Dueño (Nombre)</th>
+                <th>RUT Dueño</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-body">
+            </tbody>
+    </table>
+
+    <script>
+        // Consumir el método GET
+        fetch('/api/libros')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('tabla-body');
+                data.forEach(libro => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${libro.titulo}</td>
+                        <td>${libro.autor}</td>
+                        <td>${libro.genero}</td>
+                        <td>${libro.datosUsuario.nombre}</td>
+                        <td>${libro.datosUsuario.rut}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error cargando los datos:', error));
+    </script>
+
+</body>
+</html>

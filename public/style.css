@@ -1,0 +1,84 @@
+body { 
+    font-family: Arial, sans-serif; 
+    padding: 20px; 
+    background-color: #b4b4b4;
+    color: #333;
+}
+
+.contenedor {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.columna { 
+    flex: 1; 
+    min-width: 300px; 
+}
+
+.columna-completa { 
+    flex: 100%; 
+}
+.tarjeta {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    }
+.form-group { 
+    margin-bottom: 12px; 
+}
+.form-group label { 
+    display: block; 
+    font-weight: bold; 
+    margin-bottom: 5px; 
+    font-size: 14px; }
+
+.form-group input, .form-group select { 
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    box-sizing: border-box;
+}
+
+.direccion-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 10px; 
+}
+
+button { 
+    background-color: #002D62; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    width: 100%; 
+    margin-top: 10px;
+}
+
+button:hover { 
+    background-color: #001a3a; 
+}
+        
+table { width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    text-align: left; 
+    font-size: 14px; 
+}
+
+th { background-color: #002D62; 
+    color: white; 
+}

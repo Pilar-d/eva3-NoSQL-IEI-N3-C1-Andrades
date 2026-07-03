@@ -3,51 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Libros y Usuarios</title>
+    <title>Gestión de Biblioteca</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #FFE578; color: #333; }
+        .contenedor { max-width: 1200px; margin: auto; display: flex; gap: 20px; flex-wrap: wrap; }
+        .columna { flex: 1; min-width: 340px; }
+        .columna-completa { flex: 100%; }
+        .tarjeta { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #555; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        button { background-color: #002D62; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; width: 100%; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #001a3a; }
+        button.btn-eliminar { background-color: #d9534f; margin-top: 0px; width: auto; padding: 6px 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; background-color: white; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #002D62; color: white; }
     </style>
 </head>
 <body>
 
-    <h2>Listado de Libros</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Título del Libro</th>
-                <th>Autor</th>
-                <th>Género</th>
-                <th>Dueño (Nombre)</th>
-                <th>RUT Dueño</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-body">
-            </tbody>
-    </table>
+<div class="contenedor">
+    <div class="columna tarjeta">
+        <h2>1. Registrar Usuario</h2>
+        <form id="form-usuario">
+            <div class="form-group">
+                <label>Nombre Completo:</label>
+                <input type="text" id="u_nombre" required placeholder="Ej: Juan Pérez">
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>RUT (Sin puntos con guion):</label>
+                    <input type="text" id="u_rut" placeholder="12345678-9" required>
+                </div>
+                <div class="form-group">
+                    <label>Nacionalidad:</label>
+                    <select id="u_nacionalidad" required>
+                        <option value="">Seleccione...</option>
+                        <option value="CL">Chile (CL)</option>
+                        <option value="AR">Argentina (AR)</option>
+                        <option value="PE">Perú (PE)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="u_correo" required placeholder="juan@correo.cl"></div>
+                <div class="form-group"><label>Teléfono:</label><input type="text" id="u_telefono" placeholder="+56912345678"></div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group"><label>Fecha Nacimiento:</label><input type="date" id="u_fechaNacimiento" required></div>
+                <div class="form-group">
+                    <label>Género:</label>
+                    <select id="u_genero">
+                        <option value="M">Masculino (M)</option>
+                        <option value="F">Femenino (F)</option>
+                        <option value="O">Otro (O)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Contraseña (Mínimo 8 caracteres, letras y números):</label>
+                <input type="password" id="u_contrasena" required placeholder="Ej: Inacap2026">
+            </div>
+            <p style="font-weight: bold; margin-bottom: 5px; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Dirección Obligatoria</p>
+            <div class="form-grid">
+                <div class="form-group"><input type="text" id="u_comuna" placeholder="Comuna" required></div>
+                <div class="form-group"><input type="text" id="u_calle" placeholder="Calle" required></div>
+                <div class="form-group"><input type="text" id="u_numero" placeholder="Número" required></div>
+                <div class="form-group"><input type="text" id="u_depto" placeholder="Depto/Oficina"></div>
+            </div>
+            <button type="submit">Guardar Usuario</button>
+        </form>
+    </div>
 
-    <script>
-        // Consumir el método GET
-        fetch('/api/libros')
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.getElementById('tabla-body');
-                data.forEach(libro => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${libro.titulo}</td>
-                        <td>${libro.autor}</td>
-                        <td>${libro.genero}</td>
-                        <td>${libro.datosUsuario.nombre}</td>
-                        <td>${libro.datosUsuario.rut}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            })
-            .catch(error => console.error('Error cargando los datos:', error));
-    </script>
+    <div class="columna tarjeta">
+        <h2>2. Registrar Libro</h2>
+        <form id="form-libro">
+            <div class="form-group"><label>Título del Libro:</label><input type="text" id="l_titulo" required></div>
+            <div class="form-group"><label>Autor:</label><input type="text" id="l_autor" required></div>
+            <div class="form-grid">
+                <div class="form-group"><label>Editorial:</label><input type="text" id="l_editorial"></div>
+                <div class="form-group"><label>ISBN:</label><input type="text" id="l_isbn"></div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group"><label>Género:</label><input type="text" id="l_genero"></div>
+                <div class="form-group"><label>N° Páginas:</label><input type="number" id="l_paginas"></div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group"><label>Fecha Publicación:</label><input type="date" id="l_fechaPublicacion"></div>
+                <div class="form-group"><label>Idioma:</label><input type="text" id="l_idioma"></div>
+            </div>
+            <div class="form-group">
+                <label>Estado Actual:</label>
+                <select id="l_estado">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Prestado">Prestado</option>
+                    <option value="En Reparación">En Reparación</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Asignar a Dueño:</label>
+                <select id="l_usuario_id" required><option value="">Cargando usuarios...</option></select>
+            </div>
+            <button type="submit">Guardar Libro</button>
+        </form>
+    </div>
 
+    <div class="columna-completa tarjeta">
+        <h2>Listado de Usuarios Registrados</h2>
+        <table>
+            <thead><tr><th>Nombre</th><th>RUT</th><th>Correo</th><th>Nacionalidad</th><th>Acciones</th></tr></thead>
+            <tbody id="body-usuarios"></tbody>
+        </table>
+    </div>
+
+    <div class="columna-completa tarjeta">
+        <h2>Listado de Libros Asignados ($lookup)</h2>
+        <table>
+            <thead><tr><th>Título</th><th>Autor</th><th>Dueño Asociado</th><th>RUT Dueño</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function actualizarDatos() {
+        try {
+            const resU = await fetch('/api/usuarios');
+            const usuarios = await resU.json();
+            const bodyU = document.getElementById('body-usuarios');
+            const select = document.getElementById('l_usuario_id');
+            
+            bodyU.innerHTML = ''; 
+            select.innerHTML = '<option value="">Seleccione dueño...</option>';
+            
+            usuarios.forEach(u => {
+                bodyU.innerHTML += `<tr>
+                    <td>${u.nombre}</td>
+                    <td>${u.rut}</td>
+                    <td>${u.correo}</td>
+                    <td>${u.nacionalidad}</td>
+                    <td><button class="btn-eliminar" onclick="eliminarUsuario('${u._id}')">Eliminar</button></td>
+                </tr>`;
+                select.innerHTML += `<option value="${u._id}">${u.nombre} (${u.rut})</option>`;
+            });
+
+            const resL = await fetch('/api/libros');
+            const libros = await resL.json();
+            const bodyL = document.getElementById('tabla-body');
+            bodyL.innerHTML = '';
+            
+            libros.forEach(l => {
+                const nombreDueño = l.datosUsuario ? l.datosUsuario.nombre : 'Sin asignar';
+                const rutDueño = l.datosUsuario ? l.datosUsuario.rut : '-';
+                bodyL.innerHTML += `<tr>
+                    <td>${l.titulo}</td>
+                    <td>${l.autor}</td>
+                    <td>${nombreDueño}</td>
+                    <td>${rutDueño}</td>
+                    <td><button class="btn-eliminar" onclick="eliminarLibro('${l._id}')">Eliminar</button></td>
+                </tr>`;
+            });
+        } catch (error) {
+            console.error("Error al refrescar la interfaz:", error);
+        }
+    }
+
+    async function eliminarUsuario(id) {
+        if(confirm('¿Seguro que quieres eliminar este usuario? Sus libros también se borrarán.')) {
+            await fetch(`/api/usuarios/${id}`, { method: 'DELETE' });
+            actualizarDatos();
+        }
+    }
+
+    async function eliminarLibro(id) {
+        if(confirm('¿Seguro que quieres eliminar este libro?')) {
+            await fetch(`/api/libros/${id}`, { method: 'DELETE' });
+            actualizarDatos();
+        }
+    }
+
+    document.getElementById('form-usuario').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const rut = document.getElementById('u_rut').value;
+        const contrasena = document.getElementById('u_contrasena').value;
+        const fechaNacimiento = document.getElementById('u_fechaNacimiento').value;
+
+        // Validaciones en el cliente
+        const rutRegex = /^\d{7,8}-[0-9Kk]$/;
+        if (!rutRegex.test(rut)) {
+            alert("⚠️ El formato del RUT es incorrecto.\nDebe ingresarlo sin puntos y con guion (Ej: 12345678-9).");
+            return; 
+        }
+
+        const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+        if (!passRegex.test(contrasena)) {
+            alert("⚠️ La contraseña es muy débil.\nDebe tener mínimo 8 caracteres, incluyendo letras y números.");
+            return;
+        }
+
+        const fechaIngresada = new Date(fechaNacimiento);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0); 
+        
+        if (fechaIngresada >= hoy) {
+            alert("⚠️ La fecha de nacimiento debe ser anterior al día de hoy.");
+            return;
+        }
+
+        const payloadUsuario = {
+            nombre: document.getElementById('u_nombre').value,
+            rut: rut,
+            nacionalidad: document.getElementById('u_nacionalidad').value,
+            correo: document.getElementById('u_correo').value,
+            telefono: document.getElementById('u_telefono').value,
+            fechaNacimiento: fechaNacimiento,
+            genero: document.getElementById('u_genero').value,
+            contrasena: contrasena,
+            direccion: {
+                comuna: document.getElementById('u_comuna').value,
+                calle: document.getElementById('u_calle').value,
+                numero: document.getElementById('u_numero').value,
+                depto: document.getElementById('u_depto').value
+            }
+        };
+
+        const response = await fetch('/api/usuarios', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payloadUsuario)
+        });
+
+        if (response.ok) {
+            alert("¡Usuario registrado impecable en la base de datos!");
+            document.getElementById('form-usuario').reset();
+            actualizarDatos();
+        } else {
+            alert("Error del servidor, revisa la consola para más detalles.");
+        }
+    };
+
+    document.getElementById('form-libro').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const payloadLibro = {
+            titulo: document.getElementById('l_titulo').value,
+            autor: document.getElementById('l_autor').value,
+            editorial: document.getElementById('l_editorial').value,
+            isbn: document.getElementById('l_isbn').value,
+            genero: document.getElementById('l_genero').value,
+            paginas: document.getElementById('l_paginas').value || null,
+            fechaPublicacion: document.getElementById('l_fechaPublicacion').value || null,
+            idioma: document.getElementById('l_idioma').value,
+            estado: document.getElementById('l_estado').value,
+            usuario: document.getElementById('l_usuario_id').value
+        };
+
+        await fetch('/api/libros', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payloadLibro)
+        });
+
+        document.getElementById('form-libro').reset();
+        actualizarDatos();
+    };
+
+    actualizarDatos();
+</script>
 </body>
 </html>

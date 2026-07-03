@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 
 const libroSchema = new mongoose.Schema({
-    // Relación 1:N con Usuario (Criterio 8)
-    usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    usuario: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Usuario', 
+        required: [true, 'El libro debe estar asignado a un usuario'] 
+    },
     titulo: { type: String, required: true },
-    autor: String,
-    editorial: String,
-    isbn: String,
-    genero: String,
-    paginas: Number,
-    fechaPublicacion: Date,
-    idioma: String,
-    estado: String
+    autor: { type: String, required: true },
+    editorial: { type: String },
+    isbn: { type: String },
+    genero: { type: String },
+    paginas: { type: Number },
+    fechaPublicacion: { type: Date },
+    idioma: { type: String },
+    estado: { type: String, default: 'Disponible' }
 });
 
 module.exports = mongoose.model('Libro', libroSchema);

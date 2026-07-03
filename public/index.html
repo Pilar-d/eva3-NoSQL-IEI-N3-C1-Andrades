@@ -13,7 +13,28 @@
         .form-group { margin-bottom: 12px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #555; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        
+        /* Estilos base para inputs y selectores */
+        input, select { 
+            width: 100%; 
+            padding: 8px; 
+            border: 2px solid #ccc; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 14px;
+            transition: border-color 0.2s ease; /* Suaviza el cambio de color */
+        }
+
+        /* Clases dinámicas de validación visual */
+        .valido {
+            border-color: #2ecc71 !important;
+            background-color: #f4fbf7;
+        }
+        .invalido {
+            border-color: #e74c3c !important;
+            background-color: #fdf5f5;
+        }
+
         button { background-color: #002D62; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; width: 100%; font-weight: bold; margin-top: 10px; }
         button:hover { background-color: #001a3a; }
         button.btn-eliminar { background-color: #d9534f; margin-top: 0px; width: auto; padding: 6px 12px; }
@@ -184,6 +205,92 @@
         }
     }
 
+    // --- FUNCIÓN ASISTENTE PARA LOGICA VISUAL ROJO/VERDE ---
+    function aplicarEstiloValidacion(elemento, esValido) {
+        if (elemento.value.trim() === "") {
+            if (elemento.hasAttribute('required')) {
+                elemento.classList.remove('valido');
+                elemento.classList.add('invalido');
+            } else {
+                elemento.classList.remove('valido', 'invalido');
+            }
+            return;
+        }
+
+        if (esValido) {
+            elemento.classList.remove('invalido');
+            elemento.classList.add('valido');
+        } else {
+            elemento.classList.remove('valido');
+            elemento.classList.add('invalido');
+        }
+    }
+
+    // ==========================================
+    // ESCUCHADORES EN TIEMPO REAL: FORM USUARIOS
+    // ==========================================
+    document.getElementById('u_rut').addEventListener('input', function() {
+        const regex = /^\d{7,8}-[0-9Kk]$/;
+        aplicarEstiloValidacion(this, regex.test(this.value));
+    });
+
+    document.getElementById('u_contrasena').addEventListener('input', function() {
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+        aplicarEstiloValidacion(this, regex.test(this.value));
+    });
+
+    document.getElementById('u_fechaNacimiento').addEventListener('input', function() {
+        if (!this.value) { aplicarEstiloValidacion(this, false); return; }
+        const fechaIngresada = new Date(this.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        aplicarEstiloValidacion(this, fechaIngresada < hoy);
+    });
+
+    const camposSimplesUsuario = ['u_nombre', 'u_correo', 'u_nacionalidad', 'u_comuna', 'u_calle', 'u_numero'];
+    camposSimplesUsuario.forEach(id => {
+        document.getElementById(id).addEventListener('input', function() {
+            if (this.id === 'u_correo') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                aplicarEstiloValidacion(this, emailRegex.test(this.value));
+            } else {
+                aplicarEstiloValidacion(this, this.value.trim() !== "");
+            }
+        });
+    });
+
+    // ==========================================
+    // ESCUCHADORES EN TIEMPO REAL: FORM LIBROS
+    // ==========================================
+    
+    // Validar campos obligatorios del libro
+    const camposObligatoriosLibro = ['l_titulo', 'l_autor', 'l_usuario_id'];
+    camposObligatoriosLibro.forEach(id => {
+        const elemento = document.getElementById(id);
+        const evento = elemento.tagName === 'SELECT' ? 'change' : 'input';
+        elemento.addEventListener(evento, function() {
+            aplicarEstiloValidacion(this, this.value.trim() !== "");
+        });
+    });
+
+    // Validar visualmente campos opcionales del libro (verde si hay texto, neutral si está vacío)
+    const camposOpcionalesLibro = ['l_editorial', 'l_isbn', 'l_genero', 'l_paginas', 'l_fechaPublicacion', 'l_idioma', 'l_estado'];
+    camposOpcionalesLibro.forEach(id => {
+        const elemento = document.getElementById(id);
+        const evento = elemento.tagName === 'SELECT' ? 'change' : 'input';
+        elemento.addEventListener(evento, function() {
+            if (this.value.trim() !== "") {
+                this.classList.add('valido');
+                this.classList.remove('invalido');
+            } else {
+                this.classList.remove('valido', 'invalido');
+            }
+        });
+    });
+
+    // ==========================================
+    // PROCESAMIENTO DE FORMULARIOS
+    // ==========================================
     document.getElementById('form-usuario').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -191,23 +298,21 @@
         const contrasena = document.getElementById('u_contrasena').value;
         const fechaNacimiento = document.getElementById('u_fechaNacimiento').value;
 
-        // Validaciones en el cliente
         const rutRegex = /^\d{7,8}-[0-9Kk]$/;
         if (!rutRegex.test(rut)) {
-            alert("⚠️ El formato del RUT es incorrecto.\nDebe ingresarlo sin puntos y con guion (Ej: 12345678-9).");
+            alert("⚠️ Formato de RUT incorrecto. Debe ser sin puntos y con guion.");
             return; 
         }
 
         const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
         if (!passRegex.test(contrasena)) {
-            alert("⚠️ La contraseña es muy débil.\nDebe tener mínimo 8 caracteres, incluyendo letras y números.");
+            alert("⚠️ La contraseña debe tener mínimo 8 caracteres, incluyendo letras y números.");
             return;
         }
 
         const fechaIngresada = new Date(fechaNacimiento);
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0); 
-        
         if (fechaIngresada >= hoy) {
             alert("⚠️ La fecha de nacimiento debe ser anterior al día de hoy.");
             return;
@@ -239,9 +344,14 @@
         if (response.ok) {
             alert("¡Usuario registrado impecable en la base de datos!");
             document.getElementById('form-usuario').reset();
+            
+            // Remueve las clases verde/rojo limpiando la vista
+            const inputs = document.querySelectorAll('#form-usuario input, #form-usuario select');
+            inputs.forEach(input => input.classList.remove('valido', 'invalido'));
+            
             actualizarDatos();
         } else {
-            alert("Error del servidor, revisa la consola para más detalles.");
+            alert("Error del servidor al intentar guardar los datos.");
         }
     };
 
@@ -261,14 +371,24 @@
             usuario: document.getElementById('l_usuario_id').value
         };
 
-        await fetch('/api/libros', {
+        const response = await fetch('/api/libros', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payloadLibro)
         });
 
-        document.getElementById('form-libro').reset();
-        actualizarDatos();
+        if (response.ok) {
+            alert("¡Libro asignado correctamente!");
+            document.getElementById('form-libro').reset();
+            
+            // Remueve las clases verde/rojo limpiando la vista del formulario de libros
+            const inputsLibro = document.querySelectorAll('#form-libro input, #form-libro select');
+            inputsLibro.forEach(input => input.classList.remove('valido', 'invalido'));
+            
+            actualizarDatos();
+        } else {
+            alert("Error del servidor al intentar guardar el libro.");
+        }
     };
 
     actualizarDatos();

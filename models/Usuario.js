@@ -27,11 +27,10 @@ const usuarioSchema = new mongoose.Schema({
 });
 
 // Encriptar la contraseña antes de guardar (Criterio 2)
-usuarioSchema.pre('save', async function(next) {
-    if (!this.isModified('contrasena')) return next();
+usuarioSchema.pre('save', async function() {
+    if (!this.isModified('contrasena')) return;
     const salt = await bcrypt.genSalt(10);
     this.contrasena = await bcrypt.hash(this.contrasena, salt);
-    next();
 });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);

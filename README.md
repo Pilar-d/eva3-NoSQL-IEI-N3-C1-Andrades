@@ -1,40 +1,49 @@
 # Evaluación 03: Gestión de Biblioteca con MongoDB
 
-Proyecto desarrollado para la unidad de **Búsqueda avanzada con MongoDB**, enfocado en la persistencia de datos relacionales entre entidades (Usuarios y Libros) utilizando Mongoose, Node.js y Express.
+Proyecto desarrollado para la unidad de **Búsqueda avanzada con MongoDB**, enfocado en la persistencia de datos relacionales (1:N) utilizando Mongoose, Node.js y Express.
 
 ## 📋 Descripción del Proyecto
-Aplicación web para la gestión administrativa de una biblioteca. El sistema permite el registro, consulta y eliminación de usuarios y libros. La arquitectura implementa relaciones de uno a muchos (1:N), utilizando agregaciones avanzadas (`$lookup`) para integrar información de ambas colecciones.
+Aplicación web diseñada para la gestión administrativa de una biblioteca. El sistema permite registrar, consultar y eliminar usuarios y libros. La arquitectura implementa relaciones de uno a muchos (1:N), utilizando agregaciones avanzadas mediante `$lookup` para integrar información de ambas colecciones.
 
 ## 🚀 Tecnologías Utilizadas
 - **Backend:** Node.js, Express.
 - **Base de Datos:** MongoDB, Mongoose (ODM).
-- **Seguridad:** Bcrypt (hashing de contraseñas para resguardo de datos sensibles).
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla con validación dinámica).
+- **Seguridad:** Bcrypt (hashing de contraseñas).
+- **Frontend:** HTML5, CSS3, JavaScript (Vanilla con validación en tiempo real).
 
-🛠️ Instalación y Ejecución
-Para levantar el proyecto en tu entorno local, sigue estos pasos:
+## 🛠️ Instalación y Ejecución
 
-1. Requisitos Previos
-Asegúrate de tener instalado Node.js.
+### 1. Requisitos Previos
+- [Node.js](https://nodejs.org/) instalado.
+- [MongoDB](https://www.mongodb.com/) corriendo localmente en el puerto `27017`.
 
-Asegúrate de tener MongoDB instalado y ejecutándose localmente en el puerto 27017.
+### 2. Pasos de Instalación
+Clona el repositorio y prepara el entorno:
 
-2. Pasos de Instalación
-Clona este repositorio en tu equipo:
-
-Bash
+```bash
+# 1. Clonar el repositorio
 git clone <URL_DE_TU_REPOSITORIO>
-cd <NOMBRE_DE_LA_CARPETA>
-Instala las dependencias necesarias definidas en el proyecto:
+cd <NOMBRE_DE_TU_CARPETA>
 
-Bash
+# 2. Instalar dependencias (Express, Mongoose, Cors, Bcrypt)
 npm install
-3. Ejecución
-Inicia el servidor mediante Node.js:
 
-Bash
-node server.js
-El sistema confirmará la conexión: ✅ Conectado a MongoDB de forma impecable.
+3. Ejecución del Servidor
+Inicia la aplicación:
 
-Abre tu navegador y accede a la interfaz en:
+El sistema confirmará la conexión con: ✅ Conectado a MongoDB de forma impecable.
+
+4. Acceso a la Interfaz
+Abre tu navegador y dirígete a:
 http://127.0.0.1:3000
+
+📂 Estructura del Proyecto
+
+├── models/
+│   ├── Usuario.js      # Modelo de Usuario con validaciones y bcrypt
+│   └── Libro.js        # Modelo de Libro (relación 1:N con Usuario)
+├── public/
+│   └── index.html      # Interfaz con validación visual dinámica
+├── server.js           # API REST, rutas y lógica de agregación $lookup
+├── .gitignore          # Archivos excluidos (node_modules)
+└── README.md           # Documentación técnica

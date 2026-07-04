@@ -54,5 +54,5 @@ http://127.0.0.1:3000
 ├── .gitignore          # Archivos excluidos (node_modules)
 └── README.md           # Documentación técnica
 
-```bash
+```
 

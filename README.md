@@ -31,7 +31,7 @@ cd <NOMBRE_DE_TU_CARPETA>
 # 2. Instalar dependencias necesarias
 npm install
 
-3. Ejecución
+# 3. Ejecución
 Asegúrate de que el servicio de MongoDB esté activo.
 
 Inicia el servidor:
@@ -40,7 +40,7 @@ Bash
 node server.js
 El sistema confirmará la conexión: ✅ Conectado a MongoDB de forma impecable.
 
-4. Acceso a la Interfaz
+# 4. Acceso a la Interfaz
 Abre tu navegador y dirígete a:
 http://127.0.0.1:3000
 
@@ -53,3 +53,6 @@ http://127.0.0.1:3000
 ├── server.js           # API REST, rutas y lógica de agregación $lookup
 ├── .gitignore          # Archivos excluidos (node_modules)
 └── README.md           # Documentación técnica
+
+```bash
+

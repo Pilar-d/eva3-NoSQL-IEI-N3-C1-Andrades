@@ -14,8 +14,11 @@ Aplicación web diseñada para la gestión administrativa de una biblioteca. El 
 ## 🛠️ Instalación y Ejecución
 
 ### 1. Requisitos Previos
-- [Node.js](https://nodejs.org/) instalado.
-- [MongoDB](https://www.mongodb.com/) corriendo localmente en el puerto `27017`.
+* **Node.js:** Asegúrate de tener instalada una versión LTS.
+* **MongoDB:** Debe estar instalado y activo.
+    * **Verificación:** El servicio debe estar escuchando en `mongodb://127.0.0.1:27017/`.
+    * **Iniciar servicio (macOS):** `brew services start mongodb-community`
+    * **Iniciar servicio (Windows):** Iniciar el servicio `MongoDB` desde el Administrador de Servicios.
 
 ### 2. Pasos de Instalación
 Clona el repositorio y prepara el entorno:
@@ -25,23 +28,26 @@ Clona el repositorio y prepara el entorno:
 git clone <URL_DE_TU_REPOSITORIO>
 cd <NOMBRE_DE_TU_CARPETA>
 
-# 2. Instalar dependencias (Express, Mongoose, Cors, Bcrypt)
+# 2. Instalar dependencias necesarias
 npm install
 
-3. Ejecución del Servidor
-Inicia la aplicación:
+3. Ejecución
+Asegúrate de que el servicio de MongoDB esté activo.
 
-El sistema confirmará la conexión con: ✅ Conectado a MongoDB de forma impecable.
+Inicia el servidor:
+
+Bash
+node server.js
+El sistema confirmará la conexión: ✅ Conectado a MongoDB de forma impecable.
 
 4. Acceso a la Interfaz
 Abre tu navegador y dirígete a:
 http://127.0.0.1:3000
 
 📂 Estructura del Proyecto
-
 ├── models/
-│   ├── Usuario.js      # Modelo de Usuario con validaciones y bcrypt
-│   └── Libro.js        # Modelo de Libro (relación 1:N con Usuario)
+│   ├── Usuario.js      # Esquema de Usuario (validaciones, bcrypt)
+│   └── Libro.js        # Esquema de Libro (relación 1:N con Usuario)
 ├── public/
 │   └── index.html      # Interfaz con validación visual dinámica
 ├── server.js           # API REST, rutas y lógica de agregación $lookup
